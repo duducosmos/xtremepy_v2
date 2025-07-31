@@ -203,38 +203,26 @@ The `XtremePy` algorithm implements a sliding-window based outlier detection mec
 
    Upon detecting a regime change, $z_t$ is reset to zero to start fresh monitoring, preventing continuous triggering from the same anomalous period.
 
----
 
-### Summary
+### Technical Performance Analysis of Anomaly Detection Algorithms
 
-* The sliding window captures recent data extremes, approximating the tail behavior relevant in EVT.
-* The use of the $k$-th order statistic threshold and inflation by $\gamma$ leverages EVT's principle that extremes can be statistically characterized and used to detect deviations.
-* Smoothing via SMA reduces noise-induced false positives.
-* The EWMA $z_t$ accumulates outlier evidence over time to identify persistent anomalies, enabling the detection of regime changes.
-* Resetting $z_t$ on regime change prevents repeated triggers on the same event.
-
-This method balances sensitivity to extreme outliers with robustness to noise and transient spikes, aligning with EVT's goal of characterizing rare but impactful events in stochastic processes.
-
-
-Technical Performance Analysis of Anomaly Detection Algorithms
 The table below summarizes the comparative performance metrics of four anomaly detection methods evaluated on the same dataset:
 
-Method	Precision	Recall	F1-score
-Isolation Forest	0.97	1.00	0.98
-Prophet Residuals	1.00	1.00	1.00
-Z-score	0.94	1.00	0.97
-XtremePy	0.83	1.00	0.91
+| Method            | Precision | Recall | F1-score |
+| ----------------- | --------- | ------ | -------- |
+| Isolation Forest  | 0.97      | 1.00   | 0.98     |
+| Prophet Residuals | 1.00      | 1.00   | 1.00     |
+| Z-score           | 0.94      | 1.00   | 0.97     |
+| **XtremePy**      | 0.83      | 1.00   | 0.91     |
 
-Interpretation:
+**Interpretation:**
 
-Prophet Residuals achieved ideal performance with perfect precision, recall, and F1-score, indicating excellent anomaly characterization with zero false positives or false negatives.
+* **Prophet Residuals** achieved ideal performance with perfect precision, recall, and F1-score, indicating excellent anomaly characterization with zero false positives or false negatives.
+* **Isolation Forest** demonstrates robust anomaly detection capabilities, with a high precision of 0.97 and perfect recall, resulting in a strong F1-score of 0.98. This indicates that it accurately identifies most anomalies with few false alarms.
+* The **Z-score** method also maintains strong recall, detecting all anomalies, but shows a modest decrease in precision (0.94), implying some susceptibility to false positives.
+* The **XtremePy** algorithm maintains perfect recall (1.00), ensuring no anomalies are missed; however, it has a comparatively lower precision (0.83), indicating a higher false positive rate relative to the other methods. This trade-off suggests that XtremePy is more conservative in its detection, prioritizing sensitivity over specificity.
 
-Isolation Forest demonstrates robust anomaly detection capabilities, with a high precision of 0.97 and perfect recall, resulting in a strong F1-score of 0.98. This indicates that it accurately identifies most anomalies with few false alarms.
-
-The Z-score method also maintains strong recall, detecting all anomalies, but shows a modest decrease in precision (0.94), implying some susceptibility to false positives.
-
-The XtremePy algorithm maintains perfect recall (1.00), ensuring no anomalies are missed; however, it has a comparatively lower precision (0.83), indicating a higher false positive rate relative to the other methods. This trade-off suggests that XtremePy is more conservative in its detection, prioritizing sensitivity over specificity.
-
-Conclusion:
+**Conclusion:**
 
 XtremePy, while highly sensitive, may benefit from further calibration or hybrid approaches to reduce false positive rates without compromising its anomaly detection capability. Its foundation on Extreme Value Theory provides a strong theoretical basis, but additional tuning or complementary filtering could improve precision to levels comparable with established methods like Isolation Forest or Prophet Residuals.
+
